@@ -96,9 +96,12 @@ class MyComponent extends React.Component {
 * `render`
 * `setState` 업데이트 함수 (첫 번째 인자)
 
-위의 메서드들은 여러 번 호출될 수 있기 때문에, 부작용을 포함하지 않는 것이 중요합니다. 이 규칙을 무시할 경우, 메모리 누수 혹은 잘못된 애플리케이션 상태 등 다양한 문제를 일으킬 가능성이 있습니다. 불행히도, 보통 이러한 문제들은 [예측한 대로 동작하지 않기 때문](https://ko.wikipedia.org/wiki/%EA%B2%B0%EC%A0%95%EB%A1%A0%EC%A0%81_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)에 발견하는 것이 어려울 수 있습니다.
+위의 메서드들은 여러 번 호출될 수 있기 때문에, Side-Effect(https://en.wikipedia.org/wiki/Side_effect_(computer_science))를 포함하지 않는 것이 중요합니다. 이 규칙을 무시할 경우, 메모리 누수 혹은 잘못된 애플리케이션 상태 등 다양한 문제를 일으킬 가능성이 있습니다. 불행히도, 보통 이러한 문제들은 [비결정성(non-deterministic)을 가질 수 있기 때문](https://ko.wikipedia.org/wiki/%EA%B2%B0%EC%A0%95%EB%A1%A0%EC%A0%81_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)에 발견하는 것이 어려울 수 있습니다. 
+(참고1: Side-Effect란 함수 외부에서 함수의 로컬상태를 변경하는 것을 말합니다. Side-Effect가 없다는 것은 외부에서 함수 내부상태에 영향을 미치지 않음을 의미입니다. 예를들어 함수 내부에 전역변수나 정적(Static)변수를 사용하고 있고, 함수 외부에서도 이 변수들을 수정하고 있다면 Side-Effect가 있는 상태라고 말합니다.)
+(참고2: 비결정성이란 동일한 입력 값을 주었음에도 출력 값이 달라질 수 있는 성질을 의미합니다. 반대로 결정성이란 동일한 입력 값에는 항상 같은 출력 값이 반환되는 성질을 말합니다.)
 
-Strict 모드가 자동으로 부작용을 찾아주는 것은 불가능합니다. 하지만, 조금 더 예측할 수 있게끔 만들어서 문제가 되는 부분을 발견할 수 있게 도와줍니다. 이는 아래의 함수를 의도적으로 이중으로 호출하여 찾을 수 있습니다.
+
+Strict 모드가 자동으로 Side-Effect를 발견하고 알려드릴 수는 없습니만, Strict 모드는 함수를 좀더 결정성을 가지도록 만들어서 Side-Effect를 발견할 수 있게 도와줄 수는 있습니다. 이러한 동작은 아래의 함수를 의도적으로 이중으로 호출함으로서 이루어집니다.
 
 * 클래스 컴포넌트의 `constructor`, `render` 그리고 `shouldComponentUpdate` 메서드
 * 클래스 컴포넌트의 `getDerivedStateFromProps` static 메서드
